@@ -2,10 +2,15 @@
 let mapleader=','
 imap jj <Esc>
 nmap <Space> :w<cr>
+nmap <leader>t :tabnew<cr>
+nmap <leader>l :tabn<cr>
+nmap <leader>h :tabp<cr>
+nmap <leader>q :q<cr>
+nmap <leader>s :vsplit<cr>
+nmap <leader>a <C-w><C-w>
 
 " Copy and paste to clipboard
-vmap <C-c> "+y
-nmap <C-v> "+p
+set clipboard=unnamedplus
 
 " Quick macro repeat
 nmap <leader>r @@
@@ -40,18 +45,30 @@ set nocompatible
 
 "Vundle
 filetype off
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
 " let Vundle manage Vundle
 " " required!
-Bundle 'gmarik/vundle'
-Bundle 'kien/ctrlp.vim'
-Bundle 'Valloric/YouCompleteMe'
-Bundle 'scrooloose/syntastic'
-Bundle 'justinmk/vim-sneak'
+Plugin 'gmarik/vundle'
+Plugin 'kien/ctrlp.vim'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'scrooloose/syntastic'
+Plugin 'justinmk/vim-sneak'
+Plugin 'scrooloose/nerdtree'
 
+call vundle#end()
 filetype plugin indent on
+
+map <C-n> :NERDTreeToggle<CR>
+
+" Improve ctrl-p
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\.git$\|\.hg$\|\.svn\|\.git5_specs$\|review$',
+  \ 'file': '\.exe$\|\.so$\|\.dll$',
+  \ 'link': 'blaze-bin\|blaze-genfiles\|blaze-google3'
+  \        .'\|blaze-out\|blaze-testlogs\|READONLY$',
+  \ }
 
 "Set global ycm configuration
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
@@ -117,11 +134,3 @@ else
   set autoindent		" always set autoindenting on
 
 endif " has("autocmd")
-
-" Convenient command to see the difference between the current buffer and the
-" file it was loaded from, thus the changes you made.
-" Only define it when not defined already.
-if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
-endif

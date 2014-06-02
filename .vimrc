@@ -39,7 +39,6 @@ set relativenumber
 set number
 set backupdir=~/tmp
 set directory=~/tmp
-set colorcolumn=81
 
 set nocompatible
 

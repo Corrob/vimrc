@@ -83,7 +83,7 @@ end
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ "Mail", "Web", "Development", "Etc" }, s, layouts[1])
+    tags[s] = awful.tag({ "Web", "Terminal", "Development", "Etc" }, s, layouts[1])
 end
 -- }}}
 
@@ -111,6 +111,18 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock('<span font="Terminus 12" color="red"> %a %b %d, %I:%M:%S %p</span>', 1)
+
+-- Create battery monitor widget
+bashets = require("bashets")
+batterystatus = wibox.widget.textbox()
+bashets.register("/usr/bin/acpitool -b | cut -d, -f2-",
+                  {
+                      widget = batterystatus,
+                      update_time = 10,
+                      separator = '|',
+                      format = '<span font="Terminus 12" color="green">$1 |</span>'
+                  })
+bashets.start()
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -178,7 +190,7 @@ for s = 1, screen.count() do
     mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
 
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", height = "30", screen = s })
+    mywibox[s] = awful.wibox({ position = "top", height = "28", screen = s })
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
@@ -189,6 +201,7 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
+    right_layout:add(batterystatus)
     right_layout:add(mytextclock)
 --    right_layout:add(mylayoutbox[s])
 
@@ -438,3 +451,5 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
+
+awful.util.spawn_with_shell("run_once nm-applet")

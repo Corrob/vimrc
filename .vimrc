@@ -8,6 +8,8 @@ nmap <leader>h :tabp<cr>
 nmap <leader>q :q<cr>
 nmap <leader>s :vsplit<cr>
 nmap <leader>a <C-w><C-w>
+nmap <leader>i :JavaImport<cr>
+nmap <leader>o :JavaImportOrganize<cr>
 
 " Copy and paste to clipboard
 set clipboard=unnamedplus
@@ -52,7 +54,7 @@ call vundle#begin()
 Plugin 'gmarik/vundle'
 Plugin 'kien/ctrlp.vim'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'scrooloose/syntastic'
+"Plugin 'scrooloose/syntastic'
 Plugin 'justinmk/vim-sneak'
 Plugin 'scrooloose/nerdtree'
 
@@ -71,6 +73,9 @@ let g:ctrlp_custom_ignore = {
 
 "Set global ycm configuration
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
+
+" Setup eclim and youcompleteme to work together
+let g:EclimCompletionMethod = 'omnifunc'
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
